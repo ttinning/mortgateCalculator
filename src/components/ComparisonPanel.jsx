@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { generateAmortizationSchedule } from '../utils/amortization'
 import { formatCurrency } from '../utils/format'
+import { useLocalStorageState } from '../utils/useLocalStorageState'
 
 const MIN_SCENARIOS = 2
 const MAX_SCENARIOS = 3
@@ -23,7 +23,7 @@ const inputClasses =
  * and compares monthly payment and total interest side by side.
  */
 export default function ComparisonPanel() {
-  const [scenarios, setScenarios] = useState([
+  const [scenarios, setScenarios] = useLocalStorageState('mortgage-calculator:comparison', [
     createScenario('Scenario A'),
     createScenario('Scenario B', { termYears: 20, annualRatePercent: 4.5 }),
   ])

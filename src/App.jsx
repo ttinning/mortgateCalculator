@@ -7,6 +7,7 @@ import OverpaymentSavings from './components/OverpaymentSavings'
 import ComparisonPanel from './components/ComparisonPanel'
 import LBTTCalculator from './components/LBTTCalculator'
 import { calculateOverpaymentImpact } from './utils/amortization'
+import { useLocalStorageState } from './utils/useLocalStorageState'
 
 const TABS = [
   { id: 'calculator', label: 'Mortgage Calculator' },
@@ -33,7 +34,7 @@ function Section({ title, children }) {
 }
 
 function CalculatorTab() {
-  const [values, setValues] = useState(DEFAULT_LOAN)
+  const [values, setValues] = useLocalStorageState('mortgage-calculator:loan', DEFAULT_LOAN)
 
   const impact = useMemo(
     () =>

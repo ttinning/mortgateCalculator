@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { calculateLBTT, BUYER_TYPES } from '../utils/lbtt'
 import { formatCurrency } from '../utils/format'
+import { useLocalStorageState } from '../utils/useLocalStorageState'
 
 const BUYER_TYPE_LABELS = {
   [BUYER_TYPES.STANDARD]: 'Standard buyer',
@@ -9,8 +9,8 @@ const BUYER_TYPE_LABELS = {
 }
 
 export default function LBTTCalculator() {
-  const [price, setPrice] = useState(250000)
-  const [buyerType, setBuyerType] = useState(BUYER_TYPES.STANDARD)
+  const [price, setPrice] = useLocalStorageState('mortgage-calculator:lbtt-price', 250000)
+  const [buyerType, setBuyerType] = useLocalStorageState('mortgage-calculator:lbtt-buyer-type', BUYER_TYPES.STANDARD)
 
   const result = calculateLBTT(Number(price) || 0, buyerType)
 
