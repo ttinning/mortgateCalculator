@@ -8,6 +8,7 @@ import InvestmentComparison from './components/InvestmentComparison'
 import ComparisonPanel from './components/ComparisonPanel'
 import LBTTCalculator from './components/LBTTCalculator'
 import AffordabilityCalculator from './components/AffordabilityCalculator'
+import RateSwitchCalculator from './components/RateSwitchCalculator'
 import { calculateOverpaymentImpact } from './utils/amortization'
 import { useLocalStorageState } from './utils/useLocalStorageState'
 import { useDarkMode } from './utils/useDarkMode'
@@ -18,6 +19,7 @@ const TABS = [
   { id: 'comparison', label: 'Compare Scenarios' },
   { id: 'lbtt', label: 'Stamp Duty / LBTT' },
   { id: 'affordability', label: 'Affordability' },
+  { id: 'rateswitch', label: 'Rate Switch' },
 ]
 
 const DEFAULT_LOAN = {
@@ -199,6 +201,11 @@ function App() {
         {activeTab === 'affordability' && (
           <Section title="How much could you afford to borrow?">
             <AffordabilityCalculator />
+          </Section>
+        )}
+        {activeTab === 'rateswitch' && (
+          <Section title="Fixed deal → follow-on rate switch">
+            <RateSwitchCalculator />
           </Section>
         )}
       </main>
