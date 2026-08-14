@@ -5,6 +5,7 @@ import AmortizationTable from './components/AmortizationTable'
 import OverpaymentSavings from './components/OverpaymentSavings'
 import InvestmentComparison from './components/InvestmentComparison'
 import SavedScenarios from './components/SavedScenarios'
+import { HouseIcon, ScaleIcon, LandmarkIcon, PiggyBankIcon, RefreshIcon, SunIcon, MoonIcon } from './components/icons'
 import { calculateOverpaymentImpact } from './utils/amortization'
 import { useLocalStorageState } from './utils/useLocalStorageState'
 import { useDarkMode } from './utils/useDarkMode'
@@ -30,11 +31,11 @@ function TabFallback() {
 }
 
 const TABS = [
-  { id: 'calculator', label: 'Mortgage Calculator' },
-  { id: 'comparison', label: 'Compare Scenarios' },
-  { id: 'lbtt', label: 'Stamp Duty / LBTT' },
-  { id: 'affordability', label: 'Affordability' },
-  { id: 'rateswitch', label: 'Rate Switch' },
+  { id: 'calculator', label: 'Mortgage Calculator', icon: HouseIcon },
+  { id: 'comparison', label: 'Compare Scenarios', icon: ScaleIcon },
+  { id: 'lbtt', label: 'Stamp Duty / LBTT', icon: LandmarkIcon },
+  { id: 'affordability', label: 'Affordability', icon: PiggyBankIcon },
+  { id: 'rateswitch', label: 'Rate Switch', icon: RefreshIcon },
 ]
 
 const DEFAULT_LOAN = {
@@ -48,9 +49,9 @@ const DEFAULT_LOAN = {
 
 function Section({ title, children, actions }) {
   return (
-    <section className="rounded-xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700">
+    <section className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-200/70 dark:ring-slate-700/70 transition-shadow hover:shadow-md">
       <div className="mb-4 flex items-center justify-between gap-4">
-        <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200">{title}</h2>
+        <h2 className="text-lg font-semibold tracking-tight text-slate-800 dark:text-slate-200">{title}</h2>
         {actions}
       </div>
       {children}
@@ -168,42 +169,53 @@ function App() {
   const [isDark, setIsDark] = useDarkMode()
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
-      <header className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100">
+      <header className="border-b border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-800/60 sticky top-0 z-10">
         <div className="mx-auto flex max-w-5xl items-start justify-between gap-4 px-4 py-6">
-          <div>
-            <h1 className="text-2xl font-bold">Mortgage Calculator</h1>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Estimate monthly payments, model overpayments, compare scenarios, and calculate Stamp Duty/LBTT/LTT.
-            </p>
+          <div className="flex items-start gap-3">
+            <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
+              <HouseIcon className="h-6 w-6" />
+            </span>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Mortgage Calculator</h1>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Estimate monthly payments, model overpayments, compare scenarios, and calculate Stamp Duty/LBTT/LTT.
+              </p>
+            </div>
           </div>
           <button
             type="button"
             onClick={() => setIsDark((prev) => !prev)}
             aria-label="Toggle dark mode"
-            className="shrink-0 rounded-md border border-slate-300 dark:border-slate-600 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700"
+            className="flex shrink-0 items-center gap-1.5 rounded-full border border-slate-300 dark:border-slate-600 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
           >
-            {isDark ? '☀️ Light' : '🌙 Dark'}
+            {isDark ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+            {isDark ? 'Light' : 'Dark'}
           </button>
         </div>
       </header>
 
       <nav className="mx-auto max-w-5xl px-4 pt-4">
-        <div className="flex gap-2 border-b border-slate-200 dark:border-slate-700">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              className={`-mb-px border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === tab.id
-                  ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        <div className="flex flex-wrap gap-1.5 rounded-full bg-slate-200/60 dark:bg-slate-800/60 p-1.5">
+          {TABS.map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-white/70 dark:hover:bg-slate-700/70 hover:text-slate-800 dark:hover:text-slate-200'
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                {tab.label}
+              </button>
+            )
+          })}
         </div>
       </nav>
 
@@ -239,12 +251,19 @@ function App() {
         )}
       </main>
 
-      <footer className="mx-auto max-w-5xl px-4 pb-8 text-xs text-slate-400 dark:text-slate-500">
-        Figures are estimates for guidance only. Always check current rates at{' '}
-        <a className="underline" href="https://revenue.scot" target="_blank" rel="noreferrer">
-          revenue.scot
-        </a>{' '}
-        before making financial decisions.
+      <footer className="mx-auto max-w-5xl px-4 pb-8 pt-4 text-xs text-slate-400 dark:text-slate-500">
+        <div className="border-t border-slate-200 dark:border-slate-800 pt-4">
+          Figures are estimates for guidance only. Always check current rates at{' '}
+          <a
+            className="font-medium text-blue-600 dark:text-blue-400 underline underline-offset-2 hover:text-blue-800 dark:hover:text-blue-300"
+            href="https://revenue.scot"
+            target="_blank"
+            rel="noreferrer"
+          >
+            revenue.scot
+          </a>{' '}
+          before making financial decisions.
+        </div>
       </footer>
     </div>
   )
