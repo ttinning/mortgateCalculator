@@ -14,7 +14,7 @@ import { encodeLoanParams, decodeLoanParams } from './utils/urlState'
 const TABS = [
   { id: 'calculator', label: 'Mortgage Calculator' },
   { id: 'comparison', label: 'Compare Scenarios' },
-  { id: 'lbtt', label: 'Scotland LBTT' },
+  { id: 'lbtt', label: 'Stamp Duty / LBTT' },
 ]
 
 const DEFAULT_LOAN = {
@@ -146,7 +146,7 @@ function App() {
         <div className="mx-auto max-w-5xl px-4 py-6">
           <h1 className="text-2xl font-bold">Mortgage Calculator</h1>
           <p className="mt-1 text-sm text-slate-500">
-            Estimate monthly payments, model overpayments, compare scenarios, and calculate Scotland LBTT.
+            Estimate monthly payments, model overpayments, compare scenarios, and calculate Stamp Duty/LBTT/LTT.
           </p>
         </div>
       </header>
@@ -178,7 +178,7 @@ function App() {
           </Section>
         )}
         {activeTab === 'lbtt' && (
-          <Section title="Scotland Land and Buildings Transaction Tax (LBTT)">
+          <Section title="Stamp Duty / Land Transaction Tax">
             <LBTTCalculator />
           </Section>
         )}
