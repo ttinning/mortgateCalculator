@@ -7,6 +7,7 @@ import OverpaymentSavings from './components/OverpaymentSavings'
 import InvestmentComparison from './components/InvestmentComparison'
 import ComparisonPanel from './components/ComparisonPanel'
 import LBTTCalculator from './components/LBTTCalculator'
+import AffordabilityCalculator from './components/AffordabilityCalculator'
 import { calculateOverpaymentImpact } from './utils/amortization'
 import { useLocalStorageState } from './utils/useLocalStorageState'
 import { encodeLoanParams, decodeLoanParams } from './utils/urlState'
@@ -15,6 +16,7 @@ const TABS = [
   { id: 'calculator', label: 'Mortgage Calculator' },
   { id: 'comparison', label: 'Compare Scenarios' },
   { id: 'lbtt', label: 'Stamp Duty / LBTT' },
+  { id: 'affordability', label: 'Affordability' },
 ]
 
 const DEFAULT_LOAN = {
@@ -180,6 +182,11 @@ function App() {
         {activeTab === 'lbtt' && (
           <Section title="Stamp Duty / Land Transaction Tax">
             <LBTTCalculator />
+          </Section>
+        )}
+        {activeTab === 'affordability' && (
+          <Section title="How much could you afford to borrow?">
+            <AffordabilityCalculator />
           </Section>
         )}
       </main>
