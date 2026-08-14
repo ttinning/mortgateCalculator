@@ -4,6 +4,7 @@ import MortgageSummary from './components/MortgageSummary'
 import AmortizationChart from './components/AmortizationChart'
 import AmortizationTable from './components/AmortizationTable'
 import OverpaymentSavings from './components/OverpaymentSavings'
+import InvestmentComparison from './components/InvestmentComparison'
 import ComparisonPanel from './components/ComparisonPanel'
 import LBTTCalculator from './components/LBTTCalculator'
 import { calculateOverpaymentImpact } from './utils/amortization'
@@ -115,6 +116,15 @@ function CalculatorTab() {
       </Section>
 
       <OverpaymentSavings monthsSaved={impact.monthsSaved} interestSaved={impact.interestSaved} />
+
+      {hasOverpayment && (
+        <InvestmentComparison
+          lumpSum={Number(values.lumpSum) || 0}
+          monthlyContribution={Number(values.extraMonthly) || 0}
+          months={impact.withOverpayment.payoffMonth}
+          interestSaved={impact.interestSaved}
+        />
+      )}
 
       <Section title="Principal vs. interest over time">
         <AmortizationChart schedule={active.schedule} />
