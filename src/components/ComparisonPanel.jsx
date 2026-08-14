@@ -1,6 +1,7 @@
 import { generateAmortizationSchedule } from '../utils/amortization'
 import { formatCurrency } from '../utils/format'
 import { useLocalStorageState } from '../utils/useLocalStorageState'
+import { validateField, FIELD_LIMITS } from '../utils/validation'
 
 const MIN_SCENARIOS = 2
 const MAX_SCENARIOS = 3
@@ -16,7 +17,9 @@ function createScenario(name, overrides = {}) {
 }
 
 const inputClasses =
-  'w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
+  'w-full rounded-md border px-2 py-1.5 text-sm shadow-sm focus:outline-none focus:ring-1'
+const validInputClasses = 'border-slate-300 focus:border-blue-500 focus:ring-blue-500'
+const invalidInputClasses = 'border-red-400 focus:border-red-500 focus:ring-red-500'
 
 /**
  * Lets the user configure 2-3 loan scenarios (e.g. different terms/rates)
@@ -78,27 +81,46 @@ export default function ComparisonPanel() {
             <label className="mb-1 block text-xs font-medium text-slate-600">Loan amount (£)</label>
             <input
               type="number"
-              className={inputClasses}
+              className={`${inputClasses} ${
+                validateField(scenario.principal, FIELD_LIMITS.principal) ? invalidInputClasses : validInputClasses
+              }`}
               value={scenario.principal}
               onChange={(e) => updateScenario(index, 'principal', e.target.value)}
             />
+            {validateField(scenario.principal, FIELD_LIMITS.principal) && (
+              <p className="mt-1 text-xs text-red-600">{validateField(scenario.principal, FIELD_LIMITS.principal)}</p>
+            )}
 
             <label className="mb-1 mt-2 block text-xs font-medium text-slate-600">Rate (% / year)</label>
             <input
               type="number"
               step="0.01"
-              className={inputClasses}
+              className={`${inputClasses} ${
+                validateField(scenario.annualRatePercent, FIELD_LIMITS.annualRatePercent)
+                  ? invalidInputClasses
+                  : validInputClasses
+              }`}
               value={scenario.annualRatePercent}
               onChange={(e) => updateScenario(index, 'annualRatePercent', e.target.value)}
             />
+            {validateField(scenario.annualRatePercent, FIELD_LIMITS.annualRatePercent) && (
+              <p className="mt-1 text-xs text-red-600">
+                {validateField(scenario.annualRatePercent, FIELD_LIMITS.annualRatePercent)}
+              </p>
+            )}
 
             <label className="mb-1 mt-2 block text-xs font-medium text-slate-600">Term (years)</label>
             <input
               type="number"
-              className={inputClasses}
+              className={`${inputClasses} ${
+                validateField(scenario.termYears, FIELD_LIMITS.termYears) ? invalidInputClasses : validInputClasses
+              }`}
               value={scenario.termYears}
               onChange={(e) => updateScenario(index, 'termYears', e.target.value)}
             />
+            {validateField(scenario.termYears, FIELD_LIMITS.termYears) && (
+              <p className="mt-1 text-xs text-red-600">{validateField(scenario.termYears, FIELD_LIMITS.termYears)}</p>
+            )}
           </div>
         ))}
       </div>

@@ -1,6 +1,7 @@
 import { calculateLBTT, BUYER_TYPES } from '../utils/lbtt'
 import { formatCurrency } from '../utils/format'
 import { useLocalStorageState } from '../utils/useLocalStorageState'
+import { validateField, FIELD_LIMITS } from '../utils/validation'
 
 const BUYER_TYPE_LABELS = {
   [BUYER_TYPES.STANDARD]: 'Standard buyer',
@@ -12,6 +13,7 @@ export default function LBTTCalculator() {
   const [price, setPrice] = useLocalStorageState('mortgage-calculator:lbtt-price', 250000)
   const [buyerType, setBuyerType] = useLocalStorageState('mortgage-calculator:lbtt-buyer-type', BUYER_TYPES.STANDARD)
 
+  const priceError = validateField(price, FIELD_LIMITS.price)
   const result = calculateLBTT(Number(price) || 0, buyerType)
 
   return (
@@ -26,10 +28,16 @@ export default function LBTTCalculator() {
             type="number"
             min="0"
             step="1000"
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className={`w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 ${
+              priceError
+                ? 'border-red-400 focus:border-red-500 focus:ring-red-500'
+                : 'border-slate-300 focus:border-blue-500 focus:ring-blue-500'
+            }`}
             value={price}
             onChange={(e) => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
+            aria-invalid={Boolean(priceError)}
           />
+          {priceError && <p className="mt-1 text-xs text-red-600">{priceError}</p>}
         </div>
 
         <div>
