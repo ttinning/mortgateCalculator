@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import LoanForm from './components/LoanForm'
 import MortgageSummary from './components/MortgageSummary'
 import AmortizationChart from './components/AmortizationChart'
@@ -8,6 +8,7 @@ import ComparisonPanel from './components/ComparisonPanel'
 import LBTTCalculator from './components/LBTTCalculator'
 import { calculateOverpaymentImpact } from './utils/amortization'
 import { useLocalStorageState } from './utils/useLocalStorageState'
+import { encodeLoanParams, decodeLoanParams } from './utils/urlState'
 
 const TABS = [
   { id: 'calculator', label: 'Mortgage Calculator' },
@@ -24,17 +25,63 @@ const DEFAULT_LOAN = {
   lumpSumMonth: 1,
 }
 
-function Section({ title, children }) {
+function Section({ title, children, actions }) {
   return (
     <section className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-      <h2 className="mb-4 text-lg font-semibold text-slate-800">{title}</h2>
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <h2 className="text-lg font-semibold text-slate-800">{title}</h2>
+        {actions}
+      </div>
       {children}
     </section>
   )
 }
 
+function CopyLinkButton({ getUrl }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleClick = async () => {
+    try {
+      await navigator.clipboard.writeText(getUrl())
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Clipboard API unavailable/denied — silently ignore.
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className="shrink-0 rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+    >
+      {copied ? 'Link copied!' : 'Copy shareable link'}
+    </button>
+  )
+}
+
 function CalculatorTab() {
   const [values, setValues] = useLocalStorageState('mortgage-calculator:loan', DEFAULT_LOAN)
+
+  // On mount, a shared link's query params take priority over whatever was
+  // previously saved to localStorage.
+  useEffect(() => {
+    const fromUrl = decodeLoanParams(window.location.search)
+    if (fromUrl) {
+      setValues((prev) => ({ ...prev, ...fromUrl }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Keep the URL query string in sync with the current values (without
+  // adding a new history entry per keystroke), so the current URL is always
+  // a valid shareable link.
+  useEffect(() => {
+    const query = encodeLoanParams(values)
+    const newUrl = `${window.location.pathname}${query ? `?${query}` : ''}`
+    window.history.replaceState(null, '', newUrl)
+  }, [values])
 
   const impact = useMemo(
     () =>
@@ -54,7 +101,7 @@ function CalculatorTab() {
 
   return (
     <div className="space-y-6">
-      <Section title="Loan details">
+      <Section title="Loan details" actions={<CopyLinkButton getUrl={() => window.location.href} />}>
         <LoanForm values={values} onChange={setValues} showOverpaymentFields />
       </Section>
 
