@@ -1,0 +1,37 @@
+Build a mortgage calculator web app with the following stack and requirements, deployable to Cloudflare Pages:
+
+STACK
+- React 18 + Vite
+- Tailwind CSS for styling
+- Recharts for the amortization chart
+- Vitest for unit testing the calculation logic
+- No backend required — fully client-side, static site output for Cloudflare Pages
+
+FEATURES
+1. Monthly payment calculator — inputs: loan amount, interest rate, term (years); output: monthly payment using the standard amortization formula
+2. Full amortization schedule — table and chart showing principal vs interest split per payment over the life of the loan
+3. Extra/overpayment modeling — let the user add a one-off lump sum or recurring monthly overpayment, and show the resulting time saved and interest saved compared to the base scenario
+4. Comparison mode — let the user set up 2-3 scenarios (e.g. different terms or rates) and compare monthly payment and total interest side by side
+5. Scotland LBTT calculator (Land and Buildings Transaction Tax) — given property price and buyer type, calculate the tax due using these current residential bands:
+   - 0% up to £145,000
+   - 2% on the portion from £145,001 to £250,000
+   - 5% on the portion from £250,001 to £325,000
+   - 10% on the portion from £325,001 to £750,000
+   - 12% on the portion above £750,000
+   - First-time buyer relief: nil-rate band raised to £175,000 (only the standard bands above that still apply; max relief saving is £600)
+   - Additional Dwelling Supplement (ADS) for second homes/buy-to-let: flat 8% of the FULL purchase price (not banded), added on top of standard LBTT, applies to purchases over £40,000
+   - Buyer type selector: standard buyer / first-time buyer / additional property, since each changes the calculation differently
+
+ARCHITECTURE NOTES
+- Put all calculation logic (amortization schedule, extra payments, LBTT bands) in pure functions under /src/utils, fully decoupled from UI components
+- Structure the LBTT function to take (price, buyerType) and return a breakdown by band plus ADS separately, not just a single total — makes the UI able to show the working, and makes it easy to update if bands change in a future Scottish Budget
+- Write unit tests in Vitest for the amortization and LBTT functions, covering edge cases (zero overpayment, loan paid off early, price exactly on a band boundary, first-time buyer above/below £175,000, ADS threshold at £40,000)
+- Keep it a single-page app — no routing needed
+- Clean folder structure: /src/components, /src/utils, /src/utils/__tests__
+
+DELIVERABLES
+- Working local dev setup (npm run dev)
+- npm run build producing a static /dist folder suitable for Cloudflare Pages
+- README with setup instructions, a short note on the amortization formula and LBTT bands used (with a reminder to check revenue.scot for the current rates before relying on this for real decisions), and Cloudflare Pages deployment steps (connect repo, build command `npm run build`, output directory `dist`)
+
+Please scaffold the project first, then implement: amortization calculator → tests → extra payment modeling → comparison mode → LBTT calculator → UI polish.
