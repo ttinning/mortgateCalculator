@@ -2,10 +2,10 @@ import { validateLoanInputs, FIELD_LIMITS } from '../utils/validation'
 
 const baseInputClasses =
   'w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1'
-const validInputClasses = 'border-slate-300 focus:border-blue-500 focus:ring-blue-500'
-const invalidInputClasses = 'border-red-400 focus:border-red-500 focus:ring-red-500'
-const labelClasses = 'mb-1 block text-sm font-medium text-slate-700'
-const errorClasses = 'mt-1 text-xs text-red-600'
+const validInputClasses = 'border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400'
+const invalidInputClasses = 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500 dark:focus:ring-red-400'
+const labelClasses = 'mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300'
+const errorClasses = 'mt-1 text-xs text-red-600 dark:text-red-400'
 
 function Field({ id, label, value, onChange, error, min, step }) {
   return (

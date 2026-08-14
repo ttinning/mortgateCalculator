@@ -69,12 +69,12 @@ export default function LBTTCalculator() {
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="tax-region">
+          <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300" htmlFor="tax-region">
             Region
           </label>
           <select
             id="tax-region"
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
             value={region}
             onChange={(e) => setRegion(e.target.value)}
           >
@@ -87,7 +87,7 @@ export default function LBTTCalculator() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="lbtt-price">
+          <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300" htmlFor="lbtt-price">
             Property price (£)
           </label>
           <input
@@ -97,23 +97,23 @@ export default function LBTTCalculator() {
             step="1000"
             className={`w-full rounded-md border px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 ${
               priceError
-                ? 'border-red-400 focus:border-red-500 focus:ring-red-500'
-                : 'border-slate-300 focus:border-blue-500 focus:ring-blue-500'
+                ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-red-500 dark:focus:ring-red-400'
+                : 'border-slate-300 dark:border-slate-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400'
             }`}
             value={price}
             onChange={(e) => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
             aria-invalid={Boolean(priceError)}
           />
-          {priceError && <p className="mt-1 text-xs text-red-600">{priceError}</p>}
+          {priceError && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{priceError}</p>}
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="lbtt-buyer-type">
+          <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300" htmlFor="lbtt-buyer-type">
             Buyer type
           </label>
           <select
             id="lbtt-buyer-type"
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm shadow-sm focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
             value={buyerType}
             onChange={(e) => setBuyerType(e.target.value)}
           >
@@ -127,25 +127,25 @@ export default function LBTTCalculator() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200">
-          <div className="text-xs font-medium uppercase tracking-wide text-slate-500">{config.standardLabel}</div>
-          <div className="mt-1 text-lg font-semibold text-slate-900">{formatCurrency(result.standardTax, { precise: true })}</div>
+        <div className="rounded-lg bg-white dark:bg-slate-800 p-4 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700">
+          <div className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{config.standardLabel}</div>
+          <div className="mt-1 text-lg font-semibold text-slate-900 dark:text-slate-100">{formatCurrency(result.standardTax, { precise: true })}</div>
         </div>
-        <div className="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200">
-          <div className="text-xs font-medium uppercase tracking-wide text-slate-500">{config.supplementLabel}</div>
-          <div className="mt-1 text-lg font-semibold text-slate-900">{formatCurrency(result.ads, { precise: true })}</div>
+        <div className="rounded-lg bg-white dark:bg-slate-800 p-4 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700">
+          <div className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{config.supplementLabel}</div>
+          <div className="mt-1 text-lg font-semibold text-slate-900 dark:text-slate-100">{formatCurrency(result.ads, { precise: true })}</div>
         </div>
-        <div className="rounded-lg bg-blue-50 p-4 shadow-sm ring-1 ring-blue-200">
-          <div className="text-xs font-medium uppercase tracking-wide text-blue-700">Total tax due</div>
-          <div className="mt-1 text-lg font-semibold text-blue-900">{formatCurrency(result.total, { precise: true })}</div>
+        <div className="rounded-lg bg-blue-50 dark:bg-blue-950 p-4 shadow-sm ring-1 ring-blue-200">
+          <div className="text-xs font-medium uppercase tracking-wide text-blue-700 dark:text-blue-400">Total tax due</div>
+          <div className="mt-1 text-lg font-semibold text-blue-900 dark:text-blue-200">{formatCurrency(result.total, { precise: true })}</div>
         </div>
       </div>
 
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-slate-700">Band-by-band breakdown</h3>
-        <div className="overflow-auto rounded-lg ring-1 ring-slate-200">
-          <table className="min-w-full divide-y divide-slate-200 text-sm">
-            <thead className="bg-slate-100 text-left text-xs font-semibold uppercase text-slate-600">
+        <h3 className="mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">Band-by-band breakdown</h3>
+        <div className="overflow-auto rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
+          <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700 text-sm">
+            <thead className="bg-slate-100 dark:bg-slate-800 text-left text-xs font-semibold uppercase text-slate-600 dark:text-slate-400">
               <tr>
                 <th className="px-3 py-2">Band</th>
                 <th className="px-3 py-2">Rate</th>
@@ -153,12 +153,12 @@ export default function LBTTCalculator() {
                 <th className="px-3 py-2">Tax</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {result.breakdown.map((band, index) => {
                 const effectiveRate = band.rate + (band.surchargeRate || 0)
                 const bandTax = band.tax + (band.surchargeTax || 0)
                 return (
-                  <tr key={index} className="odd:bg-white even:bg-slate-50">
+                  <tr key={index} className="odd:bg-white dark:odd:bg-slate-800 even:bg-slate-50 dark:even:bg-slate-900">
                     <td className="px-3 py-1.5">
                       {formatCurrency(band.from)} – {band.to === null ? 'and above' : formatCurrency(band.to)}
                     </td>
@@ -172,13 +172,13 @@ export default function LBTTCalculator() {
           </table>
         </div>
         {result.adsApplies && (
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
             Includes {config.supplementLabel.toLowerCase()} of {formatCurrency(result.ads, { precise: true })}.
           </p>
         )}
       </div>
 
-      <p className="text-xs text-slate-400">
+      <p className="text-xs text-slate-400 dark:text-slate-500">
         Rates shown are for guidance only and may change. Always check{' '}
         <a className="underline" href={config.officialUrl} target="_blank" rel="noreferrer">
           {config.officialLabel}

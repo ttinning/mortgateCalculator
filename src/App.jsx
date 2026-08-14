@@ -10,6 +10,7 @@ import LBTTCalculator from './components/LBTTCalculator'
 import AffordabilityCalculator from './components/AffordabilityCalculator'
 import { calculateOverpaymentImpact } from './utils/amortization'
 import { useLocalStorageState } from './utils/useLocalStorageState'
+import { useDarkMode } from './utils/useDarkMode'
 import { encodeLoanParams, decodeLoanParams } from './utils/urlState'
 
 const TABS = [
@@ -30,9 +31,9 @@ const DEFAULT_LOAN = {
 
 function Section({ title, children, actions }) {
   return (
-    <section className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <section className="rounded-xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700">
       <div className="mb-4 flex items-center justify-between gap-4">
-        <h2 className="text-lg font-semibold text-slate-800">{title}</h2>
+        <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200">{title}</h2>
         {actions}
       </div>
       {children}
@@ -57,7 +58,7 @@ function CopyLinkButton({ getUrl }) {
     <button
       type="button"
       onClick={handleClick}
-      className="shrink-0 rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+      className="shrink-0 rounded-md border border-slate-300 dark:border-slate-600 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900"
     >
       {copied ? 'Link copied!' : 'Copy shareable link'}
     </button>
@@ -141,20 +142,31 @@ function CalculatorTab() {
 
 function App() {
   const [activeTab, setActiveTab] = useState('calculator')
+  const [isDark, setIsDark] = useDarkMode()
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-5xl px-4 py-6">
-          <h1 className="text-2xl font-bold">Mortgage Calculator</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Estimate monthly payments, model overpayments, compare scenarios, and calculate Stamp Duty/LBTT/LTT.
-          </p>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+      <header className="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+        <div className="mx-auto flex max-w-5xl items-start justify-between gap-4 px-4 py-6">
+          <div>
+            <h1 className="text-2xl font-bold">Mortgage Calculator</h1>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              Estimate monthly payments, model overpayments, compare scenarios, and calculate Stamp Duty/LBTT/LTT.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsDark((prev) => !prev)}
+            aria-label="Toggle dark mode"
+            className="shrink-0 rounded-md border border-slate-300 dark:border-slate-600 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700"
+          >
+            {isDark ? '☀️ Light' : '🌙 Dark'}
+          </button>
         </div>
       </header>
 
       <nav className="mx-auto max-w-5xl px-4 pt-4">
-        <div className="flex gap-2 border-b border-slate-200">
+        <div className="flex gap-2 border-b border-slate-200 dark:border-slate-700">
           {TABS.map((tab) => (
             <button
               key={tab.id}
@@ -162,8 +174,8 @@ function App() {
               onClick={() => setActiveTab(tab.id)}
               className={`-mb-px border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
                 activeTab === tab.id
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-700'
+                  ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
               }`}
             >
               {tab.label}
@@ -191,7 +203,7 @@ function App() {
         )}
       </main>
 
-      <footer className="mx-auto max-w-5xl px-4 pb-8 text-xs text-slate-400">
+      <footer className="mx-auto max-w-5xl px-4 pb-8 text-xs text-slate-400 dark:text-slate-500">
         Figures are estimates for guidance only. Always check current rates at{' '}
         <a className="underline" href="https://revenue.scot" target="_blank" rel="noreferrer">
           revenue.scot
