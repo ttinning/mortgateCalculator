@@ -4,6 +4,7 @@ import MortgageSummary from './components/MortgageSummary'
 import AmortizationTable from './components/AmortizationTable'
 import OverpaymentSavings from './components/OverpaymentSavings'
 import InvestmentComparison from './components/InvestmentComparison'
+import SavedScenarios from './components/SavedScenarios'
 import { calculateOverpaymentImpact } from './utils/amortization'
 import { useLocalStorageState } from './utils/useLocalStorageState'
 import { useDarkMode } from './utils/useDarkMode'
@@ -123,6 +124,10 @@ function CalculatorTab() {
     <div className="space-y-6">
       <Section title="Loan details" actions={<CopyLinkButton getUrl={() => window.location.href} />}>
         <LoanForm values={values} onChange={setValues} showOverpaymentFields />
+      </Section>
+
+      <Section title="Saved scenarios">
+        <SavedScenarios currentValues={values} onLoad={(loaded) => setValues((prev) => ({ ...prev, ...loaded }))} />
       </Section>
 
       <Section title="Summary">
