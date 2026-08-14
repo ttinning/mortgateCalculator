@@ -1,18 +1,32 @@
-import { useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import LoanForm from './components/LoanForm'
 import MortgageSummary from './components/MortgageSummary'
-import AmortizationChart from './components/AmortizationChart'
 import AmortizationTable from './components/AmortizationTable'
 import OverpaymentSavings from './components/OverpaymentSavings'
 import InvestmentComparison from './components/InvestmentComparison'
-import ComparisonPanel from './components/ComparisonPanel'
-import LBTTCalculator from './components/LBTTCalculator'
-import AffordabilityCalculator from './components/AffordabilityCalculator'
-import RateSwitchCalculator from './components/RateSwitchCalculator'
 import { calculateOverpaymentImpact } from './utils/amortization'
 import { useLocalStorageState } from './utils/useLocalStorageState'
 import { useDarkMode } from './utils/useDarkMode'
 import { encodeLoanParams, decodeLoanParams } from './utils/urlState'
+
+// Code-split heavier/less-frequently-visited views into separate chunks so
+// the initial bundle only includes what's needed for the default tab.
+// AmortizationChart pulls in Recharts (the single largest dependency), and
+// the other tabs aren't visible until the user switches to them.
+const AmortizationChart = lazy(() => import('./components/AmortizationChart'))
+const ComparisonPanel = lazy(() => import('./components/ComparisonPanel'))
+const LBTTCalculator = lazy(() => import('./components/LBTTCalculator'))
+const AffordabilityCalculator = lazy(() => import('./components/AffordabilityCalculator'))
+const RateSwitchCalculator = lazy(() => import('./components/RateSwitchCalculator'))
+
+function TabFallback() {
+  return (
+    <div className="animate-pulse rounded-xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700">
+      <div className="h-4 w-1/3 rounded bg-slate-200 dark:bg-slate-700" />
+      <div className="mt-4 h-32 rounded bg-slate-100 dark:bg-slate-700" />
+    </div>
+  )
+}
 
 const TABS = [
   { id: 'calculator', label: 'Mortgage Calculator' },
@@ -132,7 +146,9 @@ function CalculatorTab() {
       )}
 
       <Section title="Principal vs. interest over time">
-        <AmortizationChart schedule={active.schedule} />
+        <Suspense fallback={<TabFallback />}>
+          <AmortizationChart schedule={active.schedule} />
+        </Suspense>
       </Section>
 
       <Section title="Amortization schedule">
@@ -190,22 +206,30 @@ function App() {
         {activeTab === 'calculator' && <CalculatorTab />}
         {activeTab === 'comparison' && (
           <Section title="Compare 2-3 scenarios">
-            <ComparisonPanel />
+            <Suspense fallback={<TabFallback />}>
+              <ComparisonPanel />
+            </Suspense>
           </Section>
         )}
         {activeTab === 'lbtt' && (
           <Section title="Stamp Duty / Land Transaction Tax">
-            <LBTTCalculator />
+            <Suspense fallback={<TabFallback />}>
+              <LBTTCalculator />
+            </Suspense>
           </Section>
         )}
         {activeTab === 'affordability' && (
           <Section title="How much could you afford to borrow?">
-            <AffordabilityCalculator />
+            <Suspense fallback={<TabFallback />}>
+              <AffordabilityCalculator />
+            </Suspense>
           </Section>
         )}
         {activeTab === 'rateswitch' && (
           <Section title="Fixed deal → follow-on rate switch">
-            <RateSwitchCalculator />
+            <Suspense fallback={<TabFallback />}>
+              <RateSwitchCalculator />
+            </Suspense>
           </Section>
         )}
       </main>
