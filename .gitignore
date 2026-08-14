@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Internal planning doc, not needed in the public repo
+prompt.txt

@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import { calculateRateSwitchSchedule } from '../utils/rateSwitch'
 import { formatCurrency } from '../utils/format'
 import { useLocalStorageState } from '../utils/useLocalStorageState'
@@ -21,16 +22,23 @@ const DEFAULT_INPUTS = {
 const initialPeriodLimits = { min: 1, max: 40, label: 'Initial deal period' }
 
 function Field({ label, value, onChange, error, step, suffix }) {
+  const id = useId()
+  const errorId = `${id}-error`
   return (
     <div>
-      <label className={labelClasses}>{label}</label>
+      <label className={labelClasses} htmlFor={id}>
+        {label}
+      </label>
       <div className="relative">
         <input
+          id={id}
           type="number"
           step={step}
           className={`${inputClasses} ${error ? invalidInputClasses : validInputClasses} ${suffix ? 'pr-8' : ''}`}
           value={value}
           onChange={(e) => onChange(e.target.value === '' ? '' : Number(e.target.value))}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? errorId : undefined}
         />
         {suffix && (
           <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-slate-400 dark:text-slate-500">
@@ -38,7 +46,11 @@ function Field({ label, value, onChange, error, step, suffix }) {
           </span>
         )}
       </div>
-      {error && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{error}</p>}
+      {error && (
+        <p id={errorId} className="mt-1 text-xs text-red-600 dark:text-red-400">
+          {error}
+        </p>
+      )}
     </div>
   )
 }

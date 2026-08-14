@@ -63,6 +63,7 @@ export default function ComparisonPanel() {
           <div key={index} className="rounded-lg bg-white dark:bg-slate-800 p-4 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700">
             <div className="mb-2 flex items-center justify-between gap-2">
               <input
+                aria-label={`Scenario ${index + 1} name`}
                 className="w-full rounded-md border border-slate-300 dark:border-slate-600 px-2 py-1 text-sm font-semibold"
                 value={scenario.name}
                 onChange={(e) => renameScenario(index, e.target.value)}
@@ -78,8 +79,14 @@ export default function ComparisonPanel() {
               )}
             </div>
 
-            <label className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">Loan amount (£)</label>
+            <label
+              htmlFor={`comparison-principal-${index}`}
+              className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400"
+            >
+              Loan amount (£)
+            </label>
             <input
+              id={`comparison-principal-${index}`}
               type="number"
               className={`${inputClasses} ${
                 validateField(scenario.principal, FIELD_LIMITS.principal) ? invalidInputClasses : validInputClasses
@@ -91,8 +98,14 @@ export default function ComparisonPanel() {
               <p className="mt-1 text-xs text-red-600 dark:text-red-400">{validateField(scenario.principal, FIELD_LIMITS.principal)}</p>
             )}
 
-            <label className="mb-1 mt-2 block text-xs font-medium text-slate-600 dark:text-slate-400">Rate (% / year)</label>
+            <label
+              htmlFor={`comparison-rate-${index}`}
+              className="mb-1 mt-2 block text-xs font-medium text-slate-600 dark:text-slate-400"
+            >
+              Rate (% / year)
+            </label>
             <input
+              id={`comparison-rate-${index}`}
               type="number"
               step="0.01"
               className={`${inputClasses} ${
@@ -109,8 +122,14 @@ export default function ComparisonPanel() {
               </p>
             )}
 
-            <label className="mb-1 mt-2 block text-xs font-medium text-slate-600 dark:text-slate-400">Term (years)</label>
+            <label
+              htmlFor={`comparison-term-${index}`}
+              className="mb-1 mt-2 block text-xs font-medium text-slate-600 dark:text-slate-400"
+            >
+              Term (years)
+            </label>
             <input
+              id={`comparison-term-${index}`}
               type="number"
               className={`${inputClasses} ${
                 validateField(scenario.termYears, FIELD_LIMITS.termYears) ? invalidInputClasses : validInputClasses
