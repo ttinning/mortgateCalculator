@@ -1,5 +1,19 @@
 import { useState } from 'react'
 import { formatCurrency } from '../utils/format'
+import { scheduleToCsv } from '../utils/csv'
+
+function downloadCsv(schedule) {
+  const csv = scheduleToCsv(schedule)
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'amortization-schedule.csv'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+}
 
 /**
  * Scrollable amortization table. Renders the full monthly schedule but only
@@ -14,6 +28,17 @@ export default function AmortizationTable({ schedule }) {
 
   return (
     <div>
+      <div className="mb-2 flex justify-end">
+        <button
+          type="button"
+          onClick={() => downloadCsv(schedule)}
+          disabled={schedule.length === 0}
+          className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Export CSV
+        </button>
+      </div>
+
       <div className="max-h-96 overflow-auto rounded-lg ring-1 ring-slate-200">
         <table className="min-w-full divide-y divide-slate-200 text-sm">
           <thead className="sticky top-0 bg-slate-100 text-left text-xs font-semibold uppercase text-slate-600">
